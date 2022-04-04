@@ -1,0 +1,28 @@
+import xlrd
+from collections import OrderedDict
+import json
+
+excel_path = 'tiktok_20220331.xlsx'
+wb = xlrd.open_workbook(excel_path)
+sh = wb.sheet_by_index(0)
+
+data_list = []
+
+for rownum in range(1, sh.nrows):
+    data = OrderedDict()
+    row_values = sh.row_values(rownum)
+    data['artist_key'] = row_values[0]
+    data['artist_name'] = row_values[1]
+    data['dateRange'] = row_values[2]
+    data['dateType'] = row_values[3]
+    data['playcount'] = row_values[4]
+    data['rank'] = row_values[5]
+    data['title_name_TOP1'] = row_values[6]
+    data['title_name_TOP2'] = row_values[7]
+    data['title_name_TOP3'] = row_values[8]
+    data_list.append(data)
+
+j = json.dumps(data_list, ensure_ascii=False)
+
+with open('/data.json', 'w+') as f:
+    f.write(j)
